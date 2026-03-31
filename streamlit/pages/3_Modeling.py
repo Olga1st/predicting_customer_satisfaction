@@ -4,22 +4,29 @@ import pandas as pd
 st.title("🤖 Modeling, Evaluation & Interpretability")
 
 # --- Models ---
-st.subheader("Models Compared")
+#st.subheader("Models Compared")
 
-st.markdown("""
-- **XGBoost (Gradient Boosting)** → High performance
-- **Random Forest** → Baseline model
-""")
+#st.markdown("""
+#- **XGBoost (Gradient Boosting)** → High performance
+#- **Random Forest** → Baseline model
+#""")
 
-# --- Real Results (you should replace with your actual numbers) ---
-results = pd.DataFrame({
-    "Model": ["XGBoost", "Random Forest"],
-    "Accuracy": [0.89, 0.84],
-    "F1 Score": [0.88, 0.83]
-})
+df = pd.read_csv("models/model_comparison.csv")
 
-st.subheader("Model Performance Comparison")
-st.table(results)
+st.subheader("Model Comparison")
+st.dataframe(df)
+if st.button("Re-run Model Comparison"):
+    from src.models.compare_models import compare_models
+    df = compare_models()
+    st.dataframe(df)
+    
+st.subheader("Performance Comparison")
+
+st.bar_chart(df.set_index("model")[["f1_score", "cv_mean_f1"]])
+
+best_model = df.iloc[0]["model"]
+
+st.success(f"🏆 Best Model: {best_model}")
 
 # --- Interpretation ---
 st.subheader("Model Interpretation")

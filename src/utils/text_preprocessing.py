@@ -42,4 +42,5 @@ def add_structured_features(df: pd.DataFrame) -> pd.DataFrame:
     df["review_length"] = df["review_text"].astype(str).apply(lambda x: len(x.split()))
     df["has_response"] = df["supplier_response"].notna().astype(int)
     df["verified"] = df["verified"].astype(int)
+    df['rating'] = df['rating_svg'].astype(float)
     return df

@@ -15,12 +15,14 @@ def preprocess_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
     Komplette Preprocessing-Pipeline:
     - Text cleaning
+    - Rating numerisch
     - Strukturierte Features
     """
     df = df.copy()
     # Text cleaning
     df["review_text_clean"] = df["review_text"].astype(str).apply(clean_text)
-    
+    #Rating numerisch
+    df['rating'] = df['rating_svg'].astype(float)
     # Zusätzliche Features
     df = add_structured_features(df)
     

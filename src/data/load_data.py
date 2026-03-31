@@ -1,8 +1,10 @@
 import pandas as pd
 from pathlib import Path
 from typing import Tuple
+
+
 #Path anpassen
-RAW_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "raw" / "trustpilot_reviews_production"
+RAW_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "raw" / "trustpilot_reviews_production.json"
 PROCESSED_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "processed" / "reviews_clean.csv"
 
 def load_raw_data() -> pd.DataFrame:
@@ -20,7 +22,23 @@ def load_raw_data() -> pd.DataFrame:
 def load_processed_data() -> pd.DataFrame:
     """
     Load already cleaned/processed data.
+    No such file->> run build_features.py first to create it.
     """
+    if PROCESSED_PATH.exists():
+        print("✅ Loading processed dataset...")
+        return pd.read_csv(PROCESSED_PATH)
+
+    print("⚠️ Processed data not found. Running cleaning pipeline...")
+    from src.features.build_features import save_processed # import hier, um circular imports zu vermeiden
+    from src.features.build_features import preprocess_dataframe  
+    #laden
+    df_raw = load_raw_data()
+    #bereinigen
+    df_processed = preprocess_dataframe(df_raw)
+    # speichern
+    save_processed(df_processed)
+    print("✅ Processed dataset created and saved.")
+
     return pd.read_csv(PROCESSED_PATH)
 
 def get_data(use_processed: bool = True) -> pd.DataFrame:
