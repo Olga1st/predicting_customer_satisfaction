@@ -1,9 +1,8 @@
-
 import pandas as pd
 from pathlib import Path
 import joblib
 
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score, f1_score
 
@@ -20,24 +19,49 @@ from src.evaluation.validation import (
 )
 from src.evaluation.interpretability import show_feature_importance
 
+from src.utils.experiment_tracking import log_experiment
+
 MODEL_PATH = Path(__file__).resolve().parent.parent.parent / "models/model.joblib"
 
+
 def prepare_target(df: pd.DataFrame, mode: str = "classification") -> pd.Series:
-    """
-    Prepare target variable.
-    classification: binary sentiment
-    regression/multiclass: rating
-    """
     if mode == "classification":
-        return (df["rating"] >= 4).astype(int)  # positiv vs negativ
+        return (df["rating"] >= 4).astype(int)
     else:
         return df["rating"]
 
-def train_model(model_type: str = "xgboost", mode: str = "classification"):
+
+def get_model_and_params(model_type: str):
+    if model_type == "xgboost":
+        model = XGBClassifier(eval_metric="logloss")
+
+        param_grid = {
+            "model__n_estimators": [50, 100],
+            "model__max_depth": [4, 6],
+            "model__learning_rate": [0.05, 0.1],
+        }
+
+    elif model_type == "random_forest":
+        model = RandomForestClassifier(random_state=42)
+
+        param_grid = {
+            "model__n_estimators": [100, 200],
+            "model__max_depth": [10, 20],
+        }
+
+    else:
+        raise ValueError("Unknown model type")
+
+    return model, param_grid
+
+
+def train_model(
+    model_type: str = "xgboost",
+    mode: str = "classification",
+    use_tuning: bool = True
+):
     # Load data
     df = load_processed_data()
-
-    # Drop missing
     df = df.dropna(subset=["review_text_clean", "rating"])
 
     # Target
@@ -46,68 +70,85 @@ def train_model(model_type: str = "xgboost", mode: str = "classification"):
     # Features
     preprocessor, df = generate_tfidf(df)
 
-    # Train/Test Split
+    # Split
     X_train, X_test, y_train, y_test = train_test_split(
         df, y, test_size=0.2, random_state=42
     )
 
-    # Model selection
-    if model_type == "xgboost":
-        model = XGBClassifier(
-            n_estimators=100,
-            max_depth=6,
-            learning_rate=0.1,
-            eval_metric="logloss"
-        )
-    elif model_type == "random_forest":
-        model = RandomForestClassifier(
-            n_estimators=100,
-            max_depth=10,
-            random_state=42
-        )
-    else:
-        raise ValueError("Unknown model type")
+    # Model
+    model, param_grid = get_model_and_params(model_type)
 
-    # Full Pipeline
     pipeline = Pipeline([
         ("preprocessing", preprocessor),
         ("model", model)
     ])
 
-    # Train
-    pipeline.fit(X_train, y_train)
+    # Tuning
+    if use_tuning:
+        print("\n🔍 Running Hyperparameter Tuning...")
+
+        grid = GridSearchCV(
+            pipeline,
+            param_grid,
+            cv=3,
+            scoring="f1_weighted",
+            n_jobs=-1,
+            verbose=1
+        )
+
+        grid.fit(X_train, y_train)
+
+        best_pipeline = grid.best_estimator_
+        best_params = grid.best_params_
+
+        print("\n✅ Best Parameters:")
+        print(best_params)
+
+    else:
+        print("\n⚡ Training without tuning...")
+        pipeline.fit(X_train, y_train)
+        best_pipeline = pipeline
+        best_params = model.get_params()
 
     # Predict
-    y_pred = pipeline.predict(X_test)
+    y_pred = best_pipeline.predict(X_test)
 
-    # Evaluation
+    # Metrics
     acc = accuracy_score(y_test, y_pred)
     f1 = f1_score(y_test, y_pred, average="weighted")
 
     print(f"\nModel: {model_type}")
     print(f"Accuracy: {acc:.4f}")
     print(f"F1 Score: {f1:.4f}")
-    
-    #erweiterungen für evaluation, validation und interpretability,
-    #todo anappassen für regression/multiclass falls nötig
-    # Evaluation
+
+    # 🔷 Evaluation
     evaluate_classification(y_test, y_pred)
 
-    # Validation
+    # 🔷 Validation
     check_class_balance(y)
-    cross_validate_model(pipeline, df, y)
+    cross_validate_model(best_pipeline, df, y)
 
-    # Interpretability
-    show_feature_importance(pipeline)
+    # 🔷 Interpretability
+    show_feature_importance(best_pipeline)
 
-
+    # Tracking 
+    log_experiment(
+        model_name=model_type,
+        metrics={
+            "accuracy": round(acc, 4),
+            "f1_score": round(f1, 4)
+        },
+        params=best_params,
+        mode=mode,
+        use_tuning=use_tuning
+    )
 
     # Save model
-    joblib.dump(pipeline, MODEL_PATH)
-    print(f"Model saved to {MODEL_PATH}")
+    joblib.dump(best_pipeline, MODEL_PATH)
+    print(f"\n💾 Model saved to {MODEL_PATH}")
 
-    return pipeline
+    return best_pipeline
 
 
 if __name__ == "__main__":
-    train_model(model_type="xgboost")
+    train_model(model_type="xgboost", use_tuning=True)
