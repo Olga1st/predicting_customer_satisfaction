@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Tuple
 
 
+
 #Path anpassen
 RAW_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "raw" / "trustpilot_reviews_production.json"
 PROCESSED_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "processed" / "reviews_clean.csv"
@@ -31,10 +32,13 @@ def load_processed_data() -> pd.DataFrame:
     print("⚠️ Processed data not found. Running cleaning pipeline...")
     from src.features.build_features import save_processed # import hier, um circular imports zu vermeiden
     from src.features.build_features import preprocess_dataframe  
+    from src.utils.data_cleaning import clean_raw_data
+
     #laden
     df_raw = load_raw_data()
     #bereinigen
-    df_processed = preprocess_dataframe(df_raw)
+    df_cleaned = clean_raw_data(df_raw)
+    df_processed = preprocess_dataframe(df_cleaned)
     # speichern
     save_processed(df_processed)
     print("✅ Processed dataset created and saved.")
