@@ -21,6 +21,7 @@ from src.features.build_features import (
     generate_tfidf,
     generate_embeddings
 )
+from src.utils.data_cleaning import clean_raw_data
 from src.utils.experiment_tracking import log_experiment
 from src.evaluation.reporting import generate_html_report
 
@@ -86,7 +87,7 @@ def train_tfidf(df: pd.DataFrame, y: pd.Series, use_tuning=False):
 # ---------------- TRAIN EMBEDDINGS ----------------
 def train_embeddings(df: pd.DataFrame, y: pd.Series, use_tuning=False):
 
-    # 🔥 WICHTIG: Embeddings EINMAL erzeugen
+    # WICHTIG: Embeddings EINMAL erzeugen
     X_all = generate_embeddings(df)
 
     # Danach splitten
@@ -205,7 +206,9 @@ if __name__ == "__main__":
     print("\n🚀 Starting Model Comparison")
 
     df = get_data(use_processed=True)
+    df = clean_raw_data(df)
     df = preprocess_dataframe(df)
+    
     df = df.dropna(subset=["review_text_clean", "rating"])
 
     y = prepare_target(df)
