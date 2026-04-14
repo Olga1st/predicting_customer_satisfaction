@@ -13,6 +13,7 @@ import joblib
 from src.utils.text_preprocessing import clean_text, add_structured_features
 from src.data.load_data import load_raw_data
 from src.features.store_feature import FeatureStore
+from src.utils.data_cleaning import clean_raw_data
 
 # ---------------- Paths ----------------
 PROCESSED_PATH = Path(__file__).resolve().parent.parent.parent / "data/processed/reviews_clean.csv"
@@ -50,7 +51,6 @@ def generate_feature_hash(df: pd.DataFrame, version: str) -> str:
 # ---------------- PREPROCESS ----------------
 def preprocess_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
-
     df["review_text_clean"] = df["review_text"].astype(str).apply(clean_text)
     df["rating"] = df["rating_svg"].astype(float)
 
@@ -125,5 +125,6 @@ def save_processed(df: pd.DataFrame):
 # ---------------- MAIN ----------------
 if __name__ == "__main__":
     df_raw = load_raw_data()
-    df_processed = preprocess_dataframe(df_raw)
+    df_cleaned = clean_raw_data(df_raw)
+    df_processed = preprocess_dataframe(df_cleaned)
     save_processed(df_processed)
