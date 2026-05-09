@@ -1,15 +1,19 @@
 import streamlit as st
 
-st.set_page_config(page_title="Customer Sedisfaction in the Automotive Supply Chain ", layout="wide")
+st.set_page_config(
+    page_title="Customer Satisfaction Predictor",
+    layout="wide"
+)
 
-st.title("🚗 NLP Project")
-st.markdown("### Prediction of Customer Sedisfaction in Automotive Supply Chain")
+st.title("📊 Customer Satisfaction Prediction System")
 
-#The objective of this project is to extract meaningful information from customer comments. 
-#Our focus lies on German companies within the “Auto Parts & Wheels” category on Trustpilot. 
-#The dataset was scraped from Trustpilot.
+st.markdown("""
+Welcome to the end-to-end NLP system for predicting customer satisfaction from reviews.
 
-
-# Supply Chain of Auto Parts & Wheels
-
-st.sidebar.success("For more insitest select above 👆 - enjoy exploring!")
+Use the sidebar to navigate through:
+- Data analysis
+- Feature engineering
+- Modeling
+- Business insights
+- Live demo
+""")
