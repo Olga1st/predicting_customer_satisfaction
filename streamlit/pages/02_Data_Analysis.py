@@ -9,7 +9,7 @@ from src.data.load_data import load_and_clean_data
 st.title("📊 Data Analysis")
 
 df = load_raw_data()
-#df = load_and_clean_data()
+df = load_and_clean_data()
 
 # =====================
 # DISTRIBUTION

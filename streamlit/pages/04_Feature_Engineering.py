@@ -1,6 +1,6 @@
 import streamlit as st
-from src.analysis.reporting import analyze_feature_impact
-from src.analysis.visualization import plot_feature_impact
+#from src.analysis.reporting import analyze_feature_impact
+#from src.analysis.visualization import plot_feature_impact
 
 st.title("🧠 Feature Engineering")
 
@@ -19,16 +19,6 @@ We compare two approaches:
 - Multilingual understanding
 - More powerful but heavier
 """)
-
-st.header("📊 Feature Impact")
-
-df = analyze_feature_impact()
-
-st.dataframe(df)
-
-if not df.empty:
-    fig = plot_feature_impact(df)
-    st.pyplot(fig)
 
 st.header("🔍 Structured Features")
 
