@@ -8,7 +8,7 @@ from src.features.build_features import (
     get_structured_features
 )
 from src.utils.text_preprocessing import clean_text, add_structured_features
-from src.models.predict_model import predict
+
 MODEL_PATH = "models/model.joblib"
 
 # =========================================
@@ -50,7 +50,7 @@ def preprocess(text: str) -> pd.DataFrame:
 # =========================================
 # PREDICT (UI USE)
 # =========================================
-def predict_explain(text: str):
+def predict(text: str):
 
     df = preprocess(text)
 
