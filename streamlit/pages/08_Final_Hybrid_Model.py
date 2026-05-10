@@ -65,6 +65,7 @@ with col2:
         - sampling strategies had limited impact  
         - feature representation was dominant  
         - semantic ambiguity remained the core challenge  
+        
         """
     )
 
