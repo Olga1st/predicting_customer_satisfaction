@@ -58,103 +58,101 @@ with col2:
 
     st.markdown("### Final Model Pipeline")
 
-    pipeline_html = """
-    <div style="
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        gap:12px;
-        margin-top:20px;
-    ">
-
-        <div style="
-            background-color:#EAF2FF;
-            padding:12px 24px;
-            border-radius:10px;
-            width:260px;
-            text-align:center;
-            font-weight:600;
-            border:1px solid #4A6FA5;
-        ">
-            XGBoost
-        </div>
-
-        <div style="font-size:24px;">⬇️</div>
-
-        <div style="
-            background-color:#EAF2FF;
-            padding:12px 24px;
-            border-radius:10px;
-            width:260px;
-            text-align:center;
-            font-weight:600;
-            border:1px solid #4A6FA5;
-        ">
-            Structural Features
-        </div>
-
-        <div style="font-size:24px;">⬇️</div>
-
-        <div style="
-            background-color:#EAF2FF;
-            padding:12px 24px;
-            border-radius:10px;
-            width:260px;
-            text-align:center;
-            font-weight:600;
-            border:1px solid #4A6FA5;
-        ">
-            Embeddings
-        </div>
-
-        <div style="font-size:24px;">⬇️</div>
-
-        <div style="
-            background-color:#EAF2FF;
-            padding:12px 24px;
-            border-radius:10px;
-            width:260px;
-            text-align:center;
-            font-weight:600;
-            border:1px solid #4A6FA5;
-        ">
-            TF-IDF
-        </div>
-
-        <div style="font-size:24px;">⬇️</div>
-
-        <div style="
-            background-color:#EAF2FF;
-            padding:12px 24px;
-            border-radius:10px;
-            width:260px;
-            text-align:center;
-            font-weight:600;
-            border:1px solid #4A6FA5;
-        ">
-            Hyperparameter Optimization
-        </div>
-
-        <div style="font-size:24px;">⬇️</div>
-
-        <div style="
-            background-color:#DFF5E1;
-            padding:14px 24px;
-            border-radius:12px;
-            width:280px;
-            text-align:center;
-            font-weight:700;
-            border:2px solid #2E8B57;
-            font-size:18px;
-        ">
-            Final Hybrid Model
-        </div>
-
-    </div>
-    """
-
     st.markdown(
-        pipeline_html,
+        """
+<div style="
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    margin-top:20px;
+">
+
+    <div style="
+        background-color:#EAF2FF;
+        padding:12px;
+        border-radius:10px;
+        width:260px;
+        text-align:center;
+        font-weight:600;
+        border:1px solid #4A6FA5;
+    ">
+        XGBoost
+    </div>
+
+    <div style="font-size:22px;">⬇</div>
+
+    <div style="
+        background-color:#EAF2FF;
+        padding:12px;
+        border-radius:10px;
+        width:260px;
+        text-align:center;
+        font-weight:600;
+        border:1px solid #4A6FA5;
+    ">
+        Structural Features
+    </div>
+
+    <div style="font-size:22px;">⬇</div>
+
+    <div style="
+        background-color:#EAF2FF;
+        padding:12px;
+        border-radius:10px;
+        width:260px;
+        text-align:center;
+        font-weight:600;
+        border:1px solid #4A6FA5;
+    ">
+        Embeddings
+    </div>
+
+    <div style="font-size:22px;">⬇</div>
+
+    <div style="
+        background-color:#EAF2FF;
+        padding:12px;
+        border-radius:10px;
+        width:260px;
+        text-align:center;
+        font-weight:600;
+        border:1px solid #4A6FA5;
+    ">
+        TF-IDF
+    </div>
+
+    <div style="font-size:22px;">⬇</div>
+
+    <div style="
+        background-color:#EAF2FF;
+        padding:12px;
+        border-radius:10px;
+        width:260px;
+        text-align:center;
+        font-weight:600;
+        border:1px solid #4A6FA5;
+    ">
+        Hyperparameter Optimization
+    </div>
+
+    <div style="font-size:22px;">⬇</div>
+
+    <div style="
+        background-color:#DFF5E1;
+        padding:14px;
+        border-radius:12px;
+        width:280px;
+        text-align:center;
+        font-weight:700;
+        border:2px solid #2E8B57;
+        font-size:18px;
+    ">
+        Final Hybrid Model
+    </div>
+
+</div>
+        """,
         unsafe_allow_html=True
     )
 # =========================================================
