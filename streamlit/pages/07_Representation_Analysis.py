@@ -1,31 +1,40 @@
+# =========================================================
+# FILE:
+# streamlit/pages/07_Representation_vs_Sampling.py
+# =========================================================
+
 import streamlit as st
 import pandas as pd
-import numpy as np
-import plotly.express as px
-import seaborn as sns
-import matplotlib.pyplot as plt
-import ast
 
 # =========================================================
-# PAGE CONFIG
+# CONFIG
 # =========================================================
 
 st.set_page_config(
-    page_title="Feature Representation vs Sampling",
+    page_title="Representation vs Sampling",
     layout="wide"
 )
 
 # =========================================================
-# HEADER
+# LOAD DATA
+# =========================================================
+
+error_df = pd.read_csv(
+    "reports/page3_error_summary.csv"
+)
+
+# =========================================================
+# TITLE
 # =========================================================
 
 st.title("🧠 Feature Representation vs Sampling")
 
 st.markdown(
     """
-    After observing that balancing alone could not fully resolve classification errors,
-    we investigated whether model performance is primarily influenced by:
+    Balancing alone did not fully resolve classification errors.
 
+    We therefore investigated whether performance is primarily driven by:
+    
     - sampling strategy  
     - or feature representation
     """
@@ -34,145 +43,40 @@ st.markdown(
 st.markdown("---")
 
 # =========================================================
-# LOAD DATA
+# SECTION 1 — GLOBAL COMPARISON
 # =========================================================
 
-df_emb_basic = pd.read_csv("reports/sampling_comparison.csv")
-df_emb_ext = pd.read_csv("reports/sampling_comparison_ETL.csv")
-df_tfidf = pd.read_csv("reports/sampling_comparison_TF-idf.csv")
-
-# =========================================================
-# PREPARE STUDIES
-# =========================================================
-
-studies = {
-    "Embeddings + Basic Features": df_emb_basic,
-    "Embeddings + Extended Features": df_emb_ext,
-    "TF-IDF + Extended Features": df_tfidf
-}
-
-combined = []
-
-for name, df in studies.items():
-    temp = df.copy()
-    temp["study"] = name
-    combined.append(temp)
-
-combined_df = pd.concat(combined)
-
-# =========================================================
-# SECTION 1 — RESEARCH QUESTION
-# =========================================================
-
-st.header("1️⃣ Research Question")
-
-col1, col2 = st.columns([1.3, 1])
-
-with col1:
-
-    st.info(
-        """
-        ### Motivation
-        
-        Previous balancing experiments showed that:
-        
-        - class imbalance affects performance  
-        - but balancing alone does not fully resolve classification errors  
-        
-        Persistent weaknesses in neighboring rating classes suggested
-        that semantic ambiguity may be a stronger limitation.
-        """
-    )
-
-with col2:
-
-    st.success(
-        """
-        ### Research Question
-        
-        Which factor has the larger impact on performance?
-        
-        - Sampling strategy  
-        or  
-        - Feature representation
-        
-        ---
-        
-        We therefore compared multiple sampling strategies
-        across TF-IDF and embedding-based representations.
-        """
-    )
-
-# =========================================================
-# SECTION 2 — GLOBAL PERFORMANCE COMPARISON
-# =========================================================
-
-st.header("2️⃣ Global Performance Comparison")
-
-st.markdown(
-    """
-    To evaluate the relative influence of sampling and representation,
-    Macro-F1 and RMSE were compared across all experiments.
-    """
-)
-
-# ---------------------------------------------------------
-# PLOTS
-# ---------------------------------------------------------
+st.header("1️⃣ Global Performance Comparison")
 
 col1, col2 = st.columns(2)
 
-# =========================================================
-# MACRO F1
-# =========================================================
-
 with col1:
 
-    fig_f1 = px.line(
-        combined_df,
-        x="experiment",
-        y="macro_f1",
-        color="study",
-        markers=True,
-        title="Macro-F1 Across Experiments"
-    )
-
-    fig_f1.update_layout(
-        yaxis_title="Macro-F1",
-        xaxis_title="Experiment",
-        height=450
-    )
-
-    st.plotly_chart(
-        fig_f1,
+    st.image(
+        "reports/figures/page3_macro_f1.png",
         use_container_width=True
     )
-
-# =========================================================
-# RMSE
-# =========================================================
 
 with col2:
 
-    fig_rmse = px.line(
-        combined_df,
-        x="experiment",
-        y="rmse",
-        color="study",
-        markers=True,
-        title="RMSE Across Experiments"
-    )
-
-    fig_rmse.update_layout(
-        yaxis_title="RMSE",
-        xaxis_title="Experiment",
-        height=450
-    )
-
-    st.plotly_chart(
-        fig_rmse,
+    st.image(
+        "reports/figures/page3_rmse.png",
         use_container_width=True
     )
+
+# =========================================================
+# GLOBAL LEGEND
+# =========================================================
+
+st.markdown(
+    """
+<span style="color:#1f77b4;">●</span> Embeddings + Basic Features &nbsp;&nbsp;
+<span style="color:#2ca02c;">●</span> Embeddings + Structural Features &nbsp;&nbsp;
+<span style="color:#ff7f0e;">●</span> TF-IDF + Structural Features &nbsp;&nbsp;
+<span style="color:#444444;">— —</span> Best
+""",
+    unsafe_allow_html=True
+)
 
 # =========================================================
 # INTERPRETATION
@@ -184,131 +88,45 @@ st.info(
     
     - Sampling strategies produced only limited improvements  
     - Undersampling consistently reduced performance  
-    - Class weighting was generally more effective than aggressive resampling  
+    - Embedding-based representations consistently outperformed TF-IDF  
     
     ---
     
-    Most importantly:
-    
-    - Embedding-based representations consistently outperformed TF-IDF  
-    - TF-IDF produced higher RMSE values across nearly all configurations  
-    
-    This suggests that feature representation has a larger influence on model behavior than sampling strategy alone.
+    Representation quality appears to have a larger impact on model behavior than sampling strategy alone.
     """
 )
 
 # =========================================================
-# SECTION 3 — ERROR STRUCTURE ANALYSIS
+# SECTION 2 — ERROR STRUCTURE
 # =========================================================
 
-st.header("3️⃣ Error Structure Analysis")
+st.markdown("---")
 
-st.markdown(
-    """
-    To better understand model behavior,
-    we analyzed the structure and severity of prediction errors.
-    """
-)
-
-# =========================================================
-# LOAD BASELINE MATRICES
-# =========================================================
-
-cm_emb = np.array(ast.literal_eval(
-    df_emb_ext[
-        df_emb_ext["experiment"] == "baseline"
-    ]["confusion_matrix"].values[0]
-))
-
-cm_tfidf = np.array(ast.literal_eval(
-    df_tfidf[
-        df_tfidf["experiment"] == "baseline"
-    ]["confusion_matrix"].values[0]
-))
-
-# =========================================================
-# CONFUSION MATRIX FUNCTION
-# =========================================================
-
-def plot_cm(cm, title):
-
-    fig, ax = plt.subplots(figsize=(5, 4))
-
-    sns.heatmap(
-        cm,
-        annot=True,
-        fmt="d",
-        cmap="Blues",
-        xticklabels=[1,2,3,4,5],
-        yticklabels=[1,2,3,4,5],
-        ax=ax
-    )
-
-    ax.set_xlabel("Predicted")
-    ax.set_ylabel("True")
-    ax.set_title(title)
-
-    return fig
-
-# =========================================================
-# MATRICES
-# =========================================================
+st.header("2️⃣ Error Structure Analysis")
 
 col1, col2 = st.columns(2)
 
 with col1:
-    st.pyplot(plot_cm(cm_emb, "Embeddings"))
+
+    st.image(
+        "reports/figures/page3_cm_embeddings.png",
+        use_container_width=True
+    )
 
 with col2:
-    st.pyplot(plot_cm(cm_tfidf, "TF-IDF"))
+
+    st.image(
+        "reports/figures/page3_cm_tfidf.png",
+        use_container_width=True
+    )
 
 # =========================================================
-# ERROR METRICS
+# ERROR SUMMARY
 # =========================================================
-
-def compute_error_distance(cm):
-
-    total_error = 0
-    total_samples = cm.sum()
-
-    for i in range(len(cm)):
-        for j in range(len(cm)):
-            total_error += abs(i - j) * cm[i][j]
-
-    return total_error / total_samples
-
-# ---------------------------------------------------------
-# COMPUTE METRICS
-# ---------------------------------------------------------
-
-err_emb = compute_error_distance(cm_emb)
-err_tfidf = compute_error_distance(cm_tfidf)
-
-critical_emb = cm_emb[0:2, 3:5].sum()
-critical_tfidf = cm_tfidf[0:2, 3:5].sum()
-
-# ---------------------------------------------------------
-# TABLE
-# ---------------------------------------------------------
 
 st.subheader("📋 Error Summary")
 
-error_df = pd.DataFrame({
-    "Model": ["Embeddings", "TF-IDF"],
-    "Average Error Distance": [
-        round(err_emb, 3),
-        round(err_tfidf, 3)
-    ],
-    "Critical Misclassifications": [
-        int(critical_emb),
-        int(critical_tfidf)
-    ]
-})
-
-st.dataframe(
-    error_df,
-    use_container_width=True
-)
+st.table(error_df)
 
 # =========================================================
 # INTERPRETATION
@@ -324,21 +142,18 @@ st.info(
     - more severe misclassifications  
     - weaker separation of neighboring classes  
     
-    In contrast, embeddings tended to produce nearby prediction errors,
+    Embeddings instead tended to produce nearby prediction errors,
     suggesting a better preservation of semantic relationships.
-    
-    ---
-    
-    This indicates that embeddings capture semantic structure more effectively,
-    particularly in ambiguous rating regions.
     """
 )
 
 # =========================================================
-# SECTION 4 — SCIENTIFIC CONCLUSION
+# SECTION 3 — SCIENTIFIC CONCLUSION
 # =========================================================
 
-st.header("4️⃣ Scientific Interpretation")
+st.markdown("---")
+
+st.header("3️⃣ Scientific Conclusion")
 
 st.success(
     """
@@ -354,22 +169,19 @@ st.success(
     
     - higher Macro-F1  
     - lower RMSE  
-    - smaller prediction distances  
     - fewer critical errors  
+    - smaller prediction distances  
     
-    This suggests that representation quality —
-    not sampling strategy —
-    is the dominant factor in handling semantic ambiguity.
+    This suggests that representation quality appears to be the dominant factor in handling semantic ambiguity.
     
     ---
     
-    ### Transition to Next Phase
+    ### Transition to Final Phase
     
-    The results raised an important question:
+    This raised an important question:
     
-    Could TF-IDF and embeddings capture complementary signals
-    rather than competing representations?
+    Could TF-IDF and embeddings capture complementary signals rather than competing representations?
     
-    → This motivated the development of hybrid models in the next phase.
+    → This motivated the development of hybrid models in the final phase.
     """
 )
