@@ -2,26 +2,34 @@ import streamlit as st
 import pandas as pd
 
 # =========================================================
+# PAGE CONFIG
+# =========================================================
+
+st.set_page_config(
+    page_title="Exploratory Data Analysis",
+    layout="wide"
+)
+
+# =========================================================
 # LOAD DATA
 # =========================================================
 
 DATA_PATH = "data/processed/reviews_processed.csv"
 
 @st.cache_data
-
 def load_data():
-    df = pd.read_csv(DATA_PATH)
-    return df
-
+    return pd.read_csv(DATA_PATH)
 
 df = load_data()
 
 # =========================================================
-# KPIS
+# KPIs
 # =========================================================
 
 num_reviews = len(df)
+
 avg_rating = df["rating"].mean()
+
 response_rate = (
     df["supplier_response"]
     .notna()
@@ -39,14 +47,14 @@ st.title("📊 Exploratory Data Analysis")
 st.markdown(
     """
     The objective of this stage is to understand the structure,
-    quality and statistical characteristics of the collected dataset.
+    statistical properties and real-world challenges of the collected dataset.
     """
 )
 
 st.markdown("---")
 
 # =========================================================
-# SECTION 1
+# SECTION 1 — DATASET OVERVIEW
 # =========================================================
 
 st.header("1️⃣ Dataset Overview")
@@ -77,15 +85,24 @@ with kpi4:
         num_companies
     )
 
+st.info(
+    """
+    The dataset contains real-world customer reviews collected from multiple companies
+    in the automotive retail sector.
+
+    The combination of textual, temporal and metadata features
+    enables both sentiment and behavioral analysis.
+    """
+)
 
 # =========================================================
-# SECTION 2
+# SECTION 2 — RATING DISTRIBUTION
 # =========================================================
 
 st.header("2️⃣ Customer Satisfaction Distribution")
 
 st.image(
-    str("reports/figures/rating_distribution.png"),
+    "reports/figures/rating_distribution.png",
     use_container_width=True
 )
 
@@ -94,70 +111,106 @@ st.info(
     The dataset is strongly imbalanced.
 
     High ratings dominate the distribution,
-    while low and mid-range ratings occur significantly less frequently.
+    while minority ratings occur substantially less frequently.
 
-    This imbalance later becomes a central challenge for model evaluation.
+    This imbalance later becomes one of the major modeling challenges.
     """
 )
 
 # =========================================================
-# SECTION 3
+# SECTION 3 — TEMPORAL ANALYSIS
 # =========================================================
 
 st.header("3️⃣ Temporal Analysis")
 
 st.image(
-    str("reports/figures/temporal_analysis.png"),
+    "reports/figures/temporal_analysis.png",
     use_container_width=True
 )
 
 st.info(
     """
-    The dataset spans more than a decade of customer feedback,
-    reflecting evolving customer behavior and language usage patterns.
+    The dataset spans more than a decade of customer feedback.
+
+    This introduces evolving language usage,
+    changing customer behavior and temporal variation in review patterns.
     """
 )
 
-
-
 # =========================================================
-# SECTION 5
+# SECTION 4 — GEOGRAPHIC & LANGUAGE DIVERSITY
 # =========================================================
 
-st.header("5️⃣ Frequent Terms")
+st.header("4️⃣ Geographic and Language Diversity")
 
 col1, col2 = st.columns(2)
 
 with col1:
 
     st.image(
-        str("reports/figures/positive_terms.png"),
+        "reports/figures/geographic_distribution.png",
         use_container_width=True
     )
 
 with col2:
 
     st.image(
-        str("reports/figures/negative_terms.png"),
+        "reports/figures/language_distribution.png",
         use_container_width=True
     )
 
 st.info(
     """
-    Positive reviews are dominated by delivery speed,
-    quality and service-related expressions.
+    Reviews originate from multiple geographic regions
+    and contain multilingual language structures.
 
-    Negative reviews contain significantly more operational problem indicators,
-    including complaints about delays, support or product quality.
-
-    The overlap between many expressions already hints at the semantic ambiguity
-    later observed during classification.
+    This increases linguistic variability
+    and motivates robust preprocessing and semantic feature extraction techniques.
     """
 )
 
+# =========================================================
+# SECTION 5 — TEXT CHARACTERISTICS
+# =========================================================
+
+st.header("5️⃣ Text Characteristics")
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    st.image(
+        "reports/figures/positive_terms.png",
+        use_container_width=True
+    )
+
+with col2:
+
+    st.image(
+        "reports/figures/negative_terms.png",
+        use_container_width=True
+    )
+
+st.image(
+    "reports/figures/review_length_distribution.png",
+    use_container_width=True
+)
+
+st.info(
+    """
+    Positive reviews are dominated by delivery speed,
+    service quality and product satisfaction.
+
+    Negative reviews contain stronger operational problem indicators,
+    including complaints about delays, support and product quality.
+
+    At the same time, substantial vocabulary overlap exists between rating classes,
+    already hinting at the semantic ambiguity later observed during classification.
+    """
+)
 
 # =========================================================
-# SECTION 6
+# SECTION 6 — INITIAL INSIGHTS
 # =========================================================
 
 st.header("6️⃣ Initial Insights")
@@ -167,14 +220,14 @@ st.success(
     ### Key Observations
 
     - strong class imbalance
-    - noisy real-world text
-    - semantic overlap between ratings
+    - semantic overlap between neighboring ratings
     - multilingual and heterogeneous review structures
+    - noisy real-world customer language
 
     ---
 
-    These observations motivated the extensive preprocessing,
+    These observations motivated the preprocessing,
     feature engineering and representation studies
-    performed in the next stages.
+    performed in the next stages of the project.
     """
 )
