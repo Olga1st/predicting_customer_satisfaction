@@ -1,3 +1,4 @@
+from pathlib import Path
 import streamlit as st
 import pandas as pd
 
@@ -11,10 +12,18 @@ st.set_page_config(
 )
 
 # =========================================================
-# LOAD DATA
+# PATHS
 # =========================================================
 
-DATA_PATH = "data/processed/reviews_processed.csv"
+BASE_DIR = Path(__file__).resolve().parents[2]
+
+DATA_PATH = BASE_DIR / "data" / "processed" / "reviews_processed.csv"
+
+FIG_DIR = BASE_DIR / "reports" / "figures"
+
+# =========================================================
+# LOAD DATA
+# =========================================================
 
 @st.cache_data
 def load_data():
@@ -102,7 +111,7 @@ st.info(
 st.header("2️⃣ Customer Satisfaction Distribution")
 
 st.image(
-    "reports/figures/rating_distribution.png",
+    FIG_DIR / "rating_distribution.png",
     use_container_width=True
 )
 
@@ -124,7 +133,7 @@ st.info(
 st.header("3️⃣ Temporal Analysis")
 
 st.image(
-    "reports/figures/temporal_analysis.png",
+    FIG_DIR / "temporal_analysis.png",
     use_container_width=True
 )
 
@@ -148,14 +157,14 @@ col1, col2 = st.columns(2)
 with col1:
 
     st.image(
-        "reports/figures/geographic_distribution.png",
+        FIG_DIR / "geographic_distribution.png",
         use_container_width=True
     )
 
 with col2:
 
     st.image(
-        "reports/figures/language_distribution.png",
+        FIG_DIR / "language_distribution.png",
         use_container_width=True
     )
 
@@ -180,19 +189,19 @@ col1, col2 = st.columns(2)
 with col1:
 
     st.image(
-        "reports/figures/positive_terms.png",
+        FIG_DIR / "positive_terms.png",
         use_container_width=True
     )
 
 with col2:
 
     st.image(
-        "reports/figures/negative_terms.png",
+        FIG_DIR / "negative_terms.png",
         use_container_width=True
     )
 
 st.image(
-    "reports/figures/review_length_distribution.png",
+    FIG_DIR / "review_length_distribution.png",
     use_container_width=True
 )
 
