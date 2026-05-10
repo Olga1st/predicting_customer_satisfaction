@@ -42,6 +42,22 @@ col1, col2 = st.columns([1.3, 1])
 
 with col1:
 
+        st.success(
+        """
+        ### Final Hyprid Pipeline
+        
+        - XGBoost  
+        - Structural Features  
+        - Embeddings 
+        - TF-IDF  
+        - Hyperparameter Optimization  
+        """
+    )
+
+
+    
+
+with col2:
     st.info(
         """
         ### Motivation
@@ -54,20 +70,7 @@ with col1:
         """
     )
 
-with col2:
-
-    st.success(
-        """
-        ### Final Hyprid Pipeline
-        
-        - XGBoost  
-        - Structural Features  
-        - Embeddings 
-        - TF-IDF  
-        - Hyperparameter Optimization  
-        """
-    )
-# =========================================================
+#===================================================
 # SECTION 2 — EVOLUTION
 # =========================================================
 
