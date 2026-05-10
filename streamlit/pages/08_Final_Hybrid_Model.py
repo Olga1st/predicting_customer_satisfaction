@@ -56,9 +56,16 @@ with col1:
 
 with col2:
 
-    st.image(
-        "reports/figures/final_pipeline.png",
-        use_container_width=True
+    st.success(
+        """
+        ### Final Hyprid Pipeline
+        
+        - XGBoost  
+        - Structural Features  
+        - Embeddings 
+        - TF-IDF  
+        - Hyperparameter Optimization  
+        """
     )
 # =========================================================
 # SECTION 2 — EVOLUTION
