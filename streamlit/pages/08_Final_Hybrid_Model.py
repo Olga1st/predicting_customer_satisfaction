@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
 
 # =========================================================
 # CONFIG
@@ -13,16 +11,11 @@ st.set_page_config(
 )
 
 # =========================================================
-# LOAD REPORTS
+# LOAD DATA
 # =========================================================
 
-comparison_df = pd.read_csv(
-    "reports/final_model_comparison.csv"
-)
-
-per_class_df = pd.read_csv(
-    "reports/final_per_class_f1.csv"
-)
+comparison_df = pd.read_csv("reports/final_model_comparison.csv")
+per_class_df = pd.read_csv("reports/final_per_class_f1.csv")
 
 # =========================================================
 # TITLE
@@ -32,15 +25,15 @@ st.title("🚀 Final Model Evolution")
 
 st.markdown(
     """
-    After identifying feature representation as the dominant factor,
-    the strongest components were combined into a final optimized pipeline.
+    After identifying feature representation as the key driver of performance,
+    we combine all insights into a final optimized hybrid model.
     """
 )
 
 st.markdown("---")
 
 # =========================================================
-# SECTION 1 — FINAL PIPELINE
+# SECTION 1 — STRATEGY
 # =========================================================
 
 st.header("1️⃣ Final Modeling Strategy")
@@ -53,146 +46,132 @@ with col1:
         """
         ### Motivation
         
-        Previous experiments showed that:
+        Previous findings showed:
         
-        - sampling strategies produced limited improvements  
-        - representation quality strongly influenced performance  
-        
-        We therefore focused on combining the strongest
-        representation components into a unified model.
+        - sampling strategies had limited impact  
+        - feature representation was dominant  
+        - semantic ambiguity remained the core challenge  
         """
     )
 
 with col2:
 
-    st.success(
-        """
-        ### Final Pipeline
-        
-        - XGBoost  
-        - Structural Features  
-        - Embeddings  
-        - TF-IDF  
-        - Hyperparameter Optimization
-        """
-    )
+    pipeline_cols = st.columns(5)
+
+steps = [
+    "XGBoost",
+    "Structural\nFeatures",
+    "Embeddings",
+    "TF-IDF",
+    "Hyperparameter\nOptimization"
+]
+
+for col, step in zip(pipeline_cols, steps):
+
+    with col:
+        st.markdown(
+            f"""
+            <div style="
+                background-color:#f0f2f6;
+                padding:20px;
+                border-radius:12px;
+                text-align:center;
+                font-weight:bold;
+                height:100px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+            ">
+                {step}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+st.markdown(
+    "<div style='text-align:center; font-size:28px;'>⬇️</div>",
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    """
+    <div style="
+        background-color:#dff0d8;
+        padding:20px;
+        border-radius:12px;
+        text-align:center;
+        font-size:22px;
+        font-weight:bold;
+    ">
+        Final Hybrid Model
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # =========================================================
-# SECTION 2 — MODEL EVOLUTION
+# SECTION 2 — EVOLUTION
 # =========================================================
 
 st.header("2️⃣ Model Evolution")
 
-fig, ax = plt.subplots(figsize=(8,5))
-
-ax.plot(
-    comparison_df["stage"],
-    comparison_df["macro_f1_mean"],
-    marker="o",
-    linewidth=2
+st.image(
+    "reports/figures/model_evolution.png",
+    use_container_width=True
 )
-
-ax.set_ylim(0,1)
-
-ax.set_ylabel("Macro-F1")
-ax.set_title("Performance Evolution")
-
-for i, value in enumerate(comparison_df["macro_f1_mean"]):
-    ax.text(
-        i,
-        value + 0.01,
-        f"{value:.3f}",
-        ha="center"
-    )
-
-plt.xticks(rotation=10)
-
-st.pyplot(fig)
 
 st.info(
     """
-    ### Observation
+    ### Interpretation
     
-    Each modeling decision was directly motivated
-    by the findings of the previous investigations.
+    Each step reflects a targeted decision derived from prior experiments.
     
-    The largest improvements were achieved through:
+    The strongest gains come from:
     
-    - stronger feature representations  
-    - hybrid semantic + lexical signals  
-    - targeted hyperparameter optimization
+    - improved feature representation  
+    - hybrid semantic signals  
+    - hyperparameter optimization  
+    
+    The model does not improve randomly — it improves structurally.
     """
 )
 
 # =========================================================
-# SECTION 3 — FINAL PER-CLASS COMPARISON
+# SECTION 3 — PER CLASS
 # =========================================================
 
-st.header("3️⃣ Baseline vs Final Hybrid Model")
+st.header("3️⃣ Baseline vs Hybrid Model")
 
-col1, col2 = st.columns(2)
+st.image(
+    "reports/figures/final_per_class_comparison.png",
+    use_container_width=True
+)
 
-# ---------- BASELINE ----------
-
-with col1:
-
-    fig, ax = plt.subplots(figsize=(5,4))
-
-    ax.bar(
-        per_class_df["class"],
-        per_class_df["baseline_f1"]
-    )
-
-    ax.set_ylim(0,1)
-
-    ax.set_title("Baseline XGB + Embeddings")
-    ax.set_xlabel("Class")
-    ax.set_ylabel("F1 Score")
-
-    st.pyplot(fig)
-
-# ---------- HYBRID ----------
-
-with col2:
-
-    fig, ax = plt.subplots(figsize=(5,4))
-
-    ax.bar(
-        per_class_df["class"],
-        per_class_df["hybrid_f1"]
-    )
-
-    ax.set_ylim(0,1)
-
-    ax.set_title("Final Hybrid Model")
-    ax.set_xlabel("Class")
-    ax.set_ylabel("F1 Score")
-
-    st.pyplot(fig)
+st.markdown(
+    """
+    ### Insight
+    
+    - consistent improvement across all classes  
+    - strongest gains in mid-range classes  
+    - reduced class imbalance sensitivity  
+    
+    → confirms improved semantic stability of hybrid approach
+    """
+)
 
 # =========================================================
-# SECTION 4 — FINAL METRICS
+# SECTION 4 — SUMMARY
 # =========================================================
 
-st.header("4️⃣ Final Metrics Summary")
-
-summary = comparison_df[
-    ["stage", "macro_f1_mean", "rmse"]
-]
-
-summary.columns = [
-    "Model",
-    "Macro-F1",
-    "RMSE"
-]
+st.header("4️⃣ Final Metrics")
 
 st.dataframe(
-    summary,
+    comparison_df[["stage", "macro_f1_mean", "rmse"]],
     use_container_width=True
 )
 
 # =========================================================
-# SECTION 5 — FINAL CONCLUSION
+# SECTION 5 — CONCLUSION
 # =========================================================
 
 st.header("5️⃣ Scientific Conclusion")
@@ -201,25 +180,17 @@ st.success(
     """
     ### Key Finding
     
-    The strongest improvements were achieved through
-    representation enhancement rather than sampling-based interventions.
+    Performance improvements are not driven by sampling,
+    but by representation quality and hybrid feature design.
     
     ---
     
-    Combining:
+    The final model integrates:
     
     - semantic embeddings  
     - lexical TF-IDF signals  
-    - structural features  
+    - structural metadata  
     
-    produced the most robust and stable model behavior.
-    
-    ---
-    
-    The final hybrid model achieved the best balance between:
-    
-    - semantic understanding  
-    - lexical precision  
-    - ordinal consistency
+    → resulting in the most robust and stable performance across all classes.
     """
 )
