@@ -56,59 +56,107 @@ with col1:
 
 with col2:
 
-    pipeline_cols = st.columns(5)
+    st.markdown("### Final Model Pipeline")
 
-steps = [
-    "XGBoost",
-    "Structural\nFeatures",
-    "Embeddings",
-    "TF-IDF",
-    "Hyperparameter\nOptimization"
-]
-
-for col, step in zip(pipeline_cols, steps):
-
-    with col:
-        st.markdown(
-            f"""
-            <div style="
-                background-color:#f0f2f6;
-                padding:20px;
-                border-radius:12px;
-                text-align:center;
-                font-weight:bold;
-                height:100px;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-            ">
-                {step}
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-st.markdown(
-    "<div style='text-align:center; font-size:28px;'>⬇️</div>",
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    """
+    pipeline_html = """
     <div style="
-        background-color:#dff0d8;
-        padding:20px;
-        border-radius:12px;
-        text-align:center;
-        font-size:22px;
-        font-weight:bold;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:12px;
+        margin-top:20px;
     ">
-        Final Hybrid Model
-    </div>
-    """,
-    unsafe_allow_html=True
-)
 
+        <div style="
+            background-color:#EAF2FF;
+            padding:12px 24px;
+            border-radius:10px;
+            width:260px;
+            text-align:center;
+            font-weight:600;
+            border:1px solid #4A6FA5;
+        ">
+            XGBoost
+        </div>
+
+        <div style="font-size:24px;">⬇️</div>
+
+        <div style="
+            background-color:#EAF2FF;
+            padding:12px 24px;
+            border-radius:10px;
+            width:260px;
+            text-align:center;
+            font-weight:600;
+            border:1px solid #4A6FA5;
+        ">
+            Structural Features
+        </div>
+
+        <div style="font-size:24px;">⬇️</div>
+
+        <div style="
+            background-color:#EAF2FF;
+            padding:12px 24px;
+            border-radius:10px;
+            width:260px;
+            text-align:center;
+            font-weight:600;
+            border:1px solid #4A6FA5;
+        ">
+            Embeddings
+        </div>
+
+        <div style="font-size:24px;">⬇️</div>
+
+        <div style="
+            background-color:#EAF2FF;
+            padding:12px 24px;
+            border-radius:10px;
+            width:260px;
+            text-align:center;
+            font-weight:600;
+            border:1px solid #4A6FA5;
+        ">
+            TF-IDF
+        </div>
+
+        <div style="font-size:24px;">⬇️</div>
+
+        <div style="
+            background-color:#EAF2FF;
+            padding:12px 24px;
+            border-radius:10px;
+            width:260px;
+            text-align:center;
+            font-weight:600;
+            border:1px solid #4A6FA5;
+        ">
+            Hyperparameter Optimization
+        </div>
+
+        <div style="font-size:24px;">⬇️</div>
+
+        <div style="
+            background-color:#DFF5E1;
+            padding:14px 24px;
+            border-radius:12px;
+            width:280px;
+            text-align:center;
+            font-weight:700;
+            border:2px solid #2E8B57;
+            font-size:18px;
+        ">
+            Final Hybrid Model
+        </div>
+
+    </div>
+    """
+
+    st.markdown(
+        pipeline_html,
+        unsafe_allow_html=True
+    )
 # =========================================================
 # SECTION 2 — EVOLUTION
 # =========================================================
