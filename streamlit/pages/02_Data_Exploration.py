@@ -1,11 +1,11 @@
 import streamlit as st
+import pandas as pd
 
 # =========================================================
 # LOAD DATA
 # =========================================================
 
 DATA_PATH = "data/processed/reviews_processed.csv"
-FIG_DIR = Path("reports/figures")
 
 @st.cache_data
 
@@ -85,7 +85,7 @@ with kpi4:
 st.header("2️⃣ Customer Satisfaction Distribution")
 
 st.image(
-    str(FIG_DIR / "rating_distribution.png"),
+    str("reports/figures/rating_distribution.png"),
     use_container_width=True
 )
 
@@ -107,7 +107,7 @@ st.info(
 st.header("3️⃣ Temporal Analysis")
 
 st.image(
-    str(FIG_DIR / "temporal_analysis.png"),
+    str("reports/figures/temporal_analysis.png"),
     use_container_width=True
 )
 
@@ -131,14 +131,14 @@ col1, col2 = st.columns(2)
 with col1:
 
     st.image(
-        str(FIG_DIR / "positive_terms.png"),
+        str("reports/figures/positive_terms.png"),
         use_container_width=True
     )
 
 with col2:
 
     st.image(
-        str(FIG_DIR / "negative_terms.png"),
+        str("reports/figures/negative_terms.png"),
         use_container_width=True
     )
 
