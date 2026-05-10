@@ -41,7 +41,7 @@ def preprocess(text: str) -> pd.DataFrame:
     # Safety Check 
     if "verified" not in df.columns:
         df["verified"] = 0
-    df["verified"] = df["verified"].fillna(0).astype(int)
+    #df["verified"] = df["verified"].fillna(0).astype(int)
 
     df = add_structured_features(df)
 
@@ -116,9 +116,3 @@ def get_tfidf_words(model_input, n=15):
         "word": [feature_names[i] for i in idx],
         "score": vec[idx]
     })
-
-def predict_rating(text: str):
-    
-    result = predict([text])
-
-    return int(result)
