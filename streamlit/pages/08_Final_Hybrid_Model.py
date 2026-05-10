@@ -55,8 +55,6 @@ with col1:
     )
 
 
-    
-
 with col2:
     st.info(
         """
@@ -108,7 +106,7 @@ st.image(
     use_container_width=True
 )
 
-st.markdown(
+st.info(
     """
     ### Insight
     
@@ -121,21 +119,10 @@ st.markdown(
 )
 
 # =========================================================
-# SECTION 4 — SUMMARY
+# SECTION 4 — CONCLUSION
 # =========================================================
 
-st.header("4️⃣ Final Metrics")
-
-st.dataframe(
-    comparison_df[["stage", "macro_f1_mean", "rmse"]],
-    use_container_width=True
-)
-
-# =========================================================
-# SECTION 5 — CONCLUSION
-# =========================================================
-
-st.header("5️⃣ Scientific Conclusion")
+st.header("4️⃣ Conclusion")
 
 st.success(
     """
