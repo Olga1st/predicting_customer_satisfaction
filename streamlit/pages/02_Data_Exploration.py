@@ -208,19 +208,19 @@ with col2:
         FIG_DIR / "negative_terms.png",
         use_container_width=True
     )
+    
+st.info(
+    """
+    Positive reviews are dominated by delivery speed,
+    service quality and product satisfaction.
 
-    st.info(
-        """
-        Positive reviews are dominated by delivery speed,
-        service quality and product satisfaction.
+    Negative reviews contain stronger operational problem indicators,
+    including complaints about delays, support and product quality.
 
-        Negative reviews contain stronger operational problem indicators,
-        including complaints about delays, support and product quality.
-
-        At the same time, substantial vocabulary overlap exists between rating classes,
-        already hinting at the semantic ambiguity later observed during classification.
-        """
-    )
+    At the same time, substantial vocabulary overlap exists between rating classes,
+    already hinting at the semantic ambiguity later observed during classification.
+    """
+)
 
 # =========================================================
 # SECTION 6 — INITIAL INSIGHTS
