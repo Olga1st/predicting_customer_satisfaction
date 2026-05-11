@@ -101,8 +101,7 @@ else:
 # EXPLANATION TEXT
 # =========================================
 st.markdown("""
-### 🧠 Interpretation
-
+### 🧠 Summary
 We use:
 
 - TF-IDF → lexical signal (keywords)
@@ -110,6 +109,8 @@ We use:
 - Structure → stability signals
 
 👉 The combination improves robustness and reduces extreme misclassification.
+👉 The core is a combination of a sentiment lexicon and machine learning
+            not a true semantic understanding model.           
 """)
 
 st.info("""
