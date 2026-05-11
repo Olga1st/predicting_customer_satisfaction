@@ -209,16 +209,6 @@ with col2:
         use_container_width=True
     )
 
-col1, col2 = st.columns([1.3, 1])
-
-with col1:
-    st.image(
-        FIG_DIR / "review_length_distribution.png",
-        use_container_width=True
-    )
-
-with col2:
-
     st.info(
         """
         Positive reviews are dominated by delivery speed,
@@ -243,7 +233,7 @@ st.success(
     ### Key Observations
 
     - strong class imbalance
-    - semantic overlap between neighboring ratings
+    - semantic overlap between ratings
     - multilingual and heterogeneous review structures
     - noisy real-world customer language
 
