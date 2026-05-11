@@ -109,13 +109,16 @@ st.info(
 # =========================================================
 
 st.header("2️⃣ Customer Satisfaction Distribution")
+col1, col2 = st.columns([1.3, 1])
 
-st.image(
-    FIG_DIR / "rating_distribution.png",
-    use_container_width=True
-)
+with col1:
 
-st.info(
+    st.image(
+        FIG_DIR / "rating_distribution.png",
+        use_container_width=True
+    )
+with col2:
+    st.info(
     """
     The dataset is strongly imbalanced.
 
@@ -124,7 +127,9 @@ st.info(
 
     This imbalance later becomes one of the major modeling challenges.
     """
-)
+    )
+
+
 
 # =========================================================
 # SECTION 3 — TEMPORAL ANALYSIS
@@ -132,19 +137,23 @@ st.info(
 
 st.header("3️⃣ Temporal Analysis")
 
-st.image(
-    FIG_DIR / "temporal_analysis.png",
-    use_container_width=True
-)
+col1, col2 = st.columns([1.3, 1])
 
-st.info(
+with col1:
+    st.image(
+        FIG_DIR / "temporal_analysis.png",
+        use_container_width=True
+    )
+
+with col2:
+    st.info(
     """
     The dataset spans more than a decade of customer feedback.
 
     This introduces evolving language usage,
     changing customer behavior and temporal variation in review patterns.
     """
-)
+    )
 
 # =========================================================
 # SECTION 4 — GEOGRAPHIC & LANGUAGE DIVERSITY
@@ -200,23 +209,28 @@ with col2:
         use_container_width=True
     )
 
-st.image(
-    FIG_DIR / "review_length_distribution.png",
-    use_container_width=True
-)
+col1, col2 = st.columns([1.3, 1])
 
-st.info(
-    """
-    Positive reviews are dominated by delivery speed,
-    service quality and product satisfaction.
+with col1:
+    st.image(
+        FIG_DIR / "review_length_distribution.png",
+        use_container_width=True
+    )
 
-    Negative reviews contain stronger operational problem indicators,
-    including complaints about delays, support and product quality.
+with col2:
 
-    At the same time, substantial vocabulary overlap exists between rating classes,
-    already hinting at the semantic ambiguity later observed during classification.
-    """
-)
+    st.info(
+        """
+        Positive reviews are dominated by delivery speed,
+        service quality and product satisfaction.
+
+        Negative reviews contain stronger operational problem indicators,
+        including complaints about delays, support and product quality.
+
+        At the same time, substantial vocabulary overlap exists between rating classes,
+        already hinting at the semantic ambiguity later observed during classification.
+        """
+    )
 
 # =========================================================
 # SECTION 6 — INITIAL INSIGHTS
