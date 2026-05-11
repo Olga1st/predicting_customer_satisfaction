@@ -27,7 +27,8 @@ Additional features:
 
 - review_length
 - verified
-- has_response
+- has_negation
+- sentiment
 
 👉 These improve model performance
 """)
@@ -35,28 +36,11 @@ Additional features:
 st.header("💡 Insights")
 
 st.markdown("""
-- TF-IDF often performs well
-- Embeddings help with multilingual data
+- TF-IDF lexical signal is strong but limited by semantic ambiguity
+- Embeddings help with multilingual data and semantic nuances
+- Structured features provide stability signals
+- Combining text + metadata improves performance
 - Best approach depends on business trade-off:
   - speed vs accuracy
 """)
 
-st.header("💡 Alternative 'Text Representation' Approaches")
-
-st.markdown("""
-## Features Used:
-
-### 1. TF-IDF
-- captures word importance
-
-### 2. Embeddings
-- multilingual semantic understanding
-
-### 3. Structured Features
-- review length
-- verified
-- has_response
-
-## Insight:
-👉 Combining text + metadata improves performance
-""")

@@ -17,11 +17,27 @@ from src.service.run_model import (
 
 from pathlib import Path
 
-st.title("🔍 Model Interpretability Dashboard")
+st.title("🔍 Business Relevance and Interpretability")
 
-text = st.text_area("Enter a review for explanation:")
+st.success("""
+### Business Relevance
 
-if st.button("Explain"):
+The hybrid model not only improves overall performance,
+but also reduces severe prediction errors.
+
+This is particularly important in customer-feedback systems,
+where stable and interpretable predictions are more valuable
+than raw accuracy alone.
+
+The combination of semantic, lexical and structural signals
+improves robustness and trustworthiness in real-world usage.
+""")
+
+st.subheader("🔍 Interpretability")
+
+text = st.text_area("Enter a review for prediction and explanation:")
+
+if st.button("Predict and Explain"):
 
     # =========================================
     # MODEL OUTPUT
@@ -45,13 +61,13 @@ if st.button("Explain"):
     # =========================================
     # LOCAL EXPLANATION
     # =========================================
-    st.subheader("🔍 Local Feature Impact")
+    #st.subheader("🔍 Local Feature Impact")
 
-    importance = explain_local(result)
+    #importance = explain_local(result)
 
-    fig2, ax2 = plt.subplots()
-    ax2.bar(range(20), importance[:20])
-    st.pyplot(fig2)
+    #fig2, ax2 = plt.subplots()
+    #ax2.bar(range(20), importance[:20])
+    #st.pyplot(fig2)
 
     # =========================================
     # TF-IDF WORDS
@@ -94,4 +110,17 @@ We use:
 - Structure → stability signals
 
 👉 The combination improves robustness and reduces extreme misclassification.
+""")
+
+st.info("""
+### Outlook
+
+Potential future improvements include:
+
+- transformer-based architectures
+- calibrated ordinal loss functions
+- active learning for ambiguous reviews
+
+The current work provides a strong and interpretable foundation
+for further development.
 """)
